@@ -3,11 +3,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <stdint.h>
-
-#define MAX_LIST_SIZE 1000
 
 typedef struct ListElmt_ {
     void *data;
@@ -91,3 +86,4 @@ void *list_data(List *list, ListElmt *element);
 */
 ListElmt *list_next(List *list, ListElmt *element);
 
+#endif
