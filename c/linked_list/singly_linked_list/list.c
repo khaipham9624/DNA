@@ -1,54 +1,81 @@
 #include "list.h"
 
 
+int match(const ListElmt* elmt1 , const ListElmt* elmt2){
+    return elmt1->data == elmt2->data;
+}
 
-void list_init(List *list, void (*destroy)(void *data)) {
+void list_init(List *list) {
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;
-    list->destroy = destroy;
-    list->match = NULL; // TODO
+    list->match = match; // TODO
 }
 
 void list_destroy(List *list){
-    ListElmt *elmt;
-    int ret = 0;
-    for (elmt = list->head; elmt != NULL;){
-        ret = list_rem_next(list, NULL, elmt->data);
+    int ret;
+    for (;list_size(list) >0;){
+        ret = list_rem_next(list, NULL);
     }
-    list->destroy = NULL;
     list->match = NULL;
+    free(list);
 }
 
 
-int list_ins_next(List *list, ListElmt *element, const void *data) {
+int list_ins_next(List *list, ListElmt *element, dataType data) {
     ListElmt *newElement = (ListElmt*)(malloc(sizeof(ListElmt)));
-    newElement->data = data;
-
-    if (element == NULL){
-        if (list_head(list) == NULL){
-            newElement->next = NULL;
-            list_tail(list) = ;
-        }
-        else {
-            newElement->next = list_head(list)->next;
-        }
-
-        list->head = newElement;
+    if (newElement == NULL) {
+        return -1;
     }
 
-    if (list_is_tail(list, element)){
+    newElement->data = data;
 
+    if (element == NULL){ // insert at head
+        if (list_head(list) == NULL){
+            newElement->next = NULL;
+            list->head = newElement;
+            list->tail = newElement;
+        } else {
+            newElement->next = list->head;
+            list->head = newElement;
+        }
+    } else if (list_is_tail(list, element)){ // insert at tail
+        newElement->next = NULL;
+        element->next = newElement;
+
+        list->tail = newElement;
+    } else { //insert at middle
+        newElement->next = element->next;
+        element->next = newElement;
     }
 
     list->size++;
     return 0;
 }
 
-int list_rem_next(List *list, ListElmt *element, void **data){
-    if (element == NULL){
-
+int list_rem_next(List *list, ListElmt *element){
+    if (list->size <= 0){
+        return -1;
     }
+
+    ListElmt *tmp;
+    if (element == NULL){ // remove head
+        tmp = list->head;
+        list->head = tmp->next;
+    }
+    else
+    {  
+        if (element->next == NULL){
+            return -1;
+        }
+        tmp = element->next;
+        element->next = tmp->next;
+    }
+    if (list_is_tail(list, tmp)){
+        list->tail = element;
+    }
+    free(tmp);
+    list->size--;
     return 0;
 }
 
@@ -72,9 +99,20 @@ int list_is_tail(List *list, ListElmt *element){
     return list->tail == element;
 }
 
-void *list_data(List *list, ListElmt *element){
+dataType list_data(List *list, ListElmt *element){
     return element->data;
 }
+
 ListElmt *list_next(List *list, ListElmt *element){
     return element->next;
 }
+
+void list_print(List *list){
+    printf("printing list\n");
+    ListElmt *elmt;
+    for (elmt = list->head; elmt != NULL; elmt = elmt->next){
+        printf("%d ", elmt->data);
+    }
+    printf("\n");
+}
+

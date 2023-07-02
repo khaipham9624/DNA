@@ -4,15 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef int dataType;
 typedef struct ListElmt_ {
-    void *data;
+    dataType data;
     struct ListElmt_ *next;
 } ListElmt;
 
 typedef struct List_ {
     int size;
-    int (*match) (const void * key1, const void * key2);
-    void (*destroy) (void *data);
+    int (*match) (const ListElmt *elmt1, const ListElmt *elmt2);
     ListElmt *head;
     ListElmt *tail;
 } List;
@@ -22,7 +22,7 @@ typedef struct List_ {
  * @param list the list to initialize
  * @param destroy the function to destroy the list
 */
-void list_init(List *list, void (*destroy)(void *data));
+void list_init(List *list);
 
 /**
  * @brief destroy the list
@@ -38,7 +38,7 @@ void list_destroy(List *list);
  * @param element pointer to the element
  * @return 0 if successful, or -1 otherwise
  * **/
-int list_ins_next(List *list, ListElmt *element, const void *data);
+int list_ins_next(List *list, ListElmt *element, dataType data);
 
 /**
  * @brief remove the data next the element in the list. If the element is NULL, the element will be removed
@@ -47,7 +47,8 @@ int list_ins_next(List *list, ListElmt *element, const void *data);
  * @param data the data to be returned
  * @return 0 if removing the element is successful, or –1 otherwise
 */
-int list_rem_next(List *list, ListElmt *element, void **data);
+int list_rem_next(List *list, ListElmt *element);
+// int list_rem_next(List *list, ListElmt *element, dataType data);
 
 /**
  * @brief return the number of elements in the list
@@ -79,11 +80,12 @@ int list_is_tail(List *list, ListElmt *element);
 /**
  * @brief return data of element
 */
-void *list_data(List *list, ListElmt *element);
+dataType list_data(List *list, ListElmt *element);
 
 /**
  * @brief return next element
 */
 ListElmt *list_next(List *list, ListElmt *element);
 
+void list_print(List *list);
 #endif
