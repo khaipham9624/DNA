@@ -28,6 +28,7 @@ int dlist_insert_next(Dlist *list, DlistElmt *elmt, const dataType data){
         if(dlist_size(list) == 0){
             newElmt->next = NULL;
             newElmt->prev = NULL;
+            list->tail = newElmt;
         } else {
             newElmt->next = list->head;
             newElmt->prev = NULL;
@@ -42,6 +43,7 @@ int dlist_insert_next(Dlist *list, DlistElmt *elmt, const dataType data){
             elmt->next->prev = newElmt;
             elmt->next = newElmt;
         } else {
+            elmt->next = newElmt;
             list->tail = newElmt;
         }
     }
@@ -76,14 +78,16 @@ int dlist_remove(Dlist *list, DlistElmt *elmt){
 
     DlistElmt *oldElmt = elmt;
 
-    elmt->next->prev = elmt->prev;
-    elmt->prev->next = elmt->next;
-
-    if (dlist_is_head(list, oldElmt)){
+    if (dlist_is_head(list, elmt)){
+        if (dlist_size(list) > 1)
+            elmt->next->prev = NULL;
         list->head = elmt->next;
-    }
-    if (dlist_is_tail(list, oldElmt)){
+    } else if (dlist_is_tail(list, elmt)){
+        elmt->prev->next = NULL;
         list->tail = elmt->prev;
+    } else {
+        elmt->next->prev = elmt->prev;
+        elmt->prev->next = elmt->next;
     }
 
     free(oldElmt);

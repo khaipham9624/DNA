@@ -18,6 +18,15 @@ int main(int argc, char **argv){
     dlist_remove(list, dlist_head(list));
     dlist_print(list);
 
+    DlistElmt *elmt = dlist_head(list);
+    int i;
+    for (i = 0; i < 1; i++) {
+        elmt = dlist_next(elmt);
+    }
+    dlist_insert_next(list, elmt, 10);
+    dlist_print(list);
+    dlist_remove(list, elmt->next);
+    dlist_print(list);
     dlist_remove(list, NULL);
     dlist_print(list);
 
