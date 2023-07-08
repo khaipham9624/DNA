@@ -12,7 +12,6 @@ typedef struct ListElmt_ {
 
 typedef struct List_ {
     int size;
-    int (*match) (const ListElmt *elmt1, const ListElmt *elmt2);
     ListElmt *head;
     ListElmt *tail;
 } List;

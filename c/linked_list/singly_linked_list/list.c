@@ -1,15 +1,9 @@
 #include "list.h"
 
-
-int match(const ListElmt* elmt1 , const ListElmt* elmt2){
-    return elmt1->data == elmt2->data;
-}
-
 void list_init(List *list) {
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;
-    list->match = match; // TODO
 }
 
 void list_destroy(List *list){
@@ -17,7 +11,6 @@ void list_destroy(List *list){
     for (;list_size(list) >0;){
         ret = list_rem_next(list, NULL);
     }
-    list->match = NULL;
     free(list);
 }
 
