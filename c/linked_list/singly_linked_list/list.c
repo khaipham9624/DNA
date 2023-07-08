@@ -11,6 +11,8 @@ void list_destroy(List *list){
     for (;list_size(list) >0;){
         ret = list_rem_next(list, NULL);
     }
+    list->head = NULL;
+    list->tail = NULL;
     free(list);
 }
 
@@ -72,7 +74,7 @@ int list_rem_next(List *list, ListElmt *element){
     return 0;
 }
 
-int list_size(List *list){
+int list_size(const List *list){
     return list->size;
 }
 
@@ -92,7 +94,7 @@ int list_is_tail(List *list, ListElmt *element){
     return list->tail == element;
 }
 
-dataType list_data(List *list, ListElmt *element){
+dataType list_data(const List *list, const ListElmt *element){
     return element->data;
 }
 
@@ -100,8 +102,8 @@ ListElmt *list_next(List *list, ListElmt *element){
     return element->next;
 }
 
-void list_print(List *list){
-    printf("printing list\n");
+void list_print(const List *list){
+    printf("printing\n");
     ListElmt *elmt;
     for (elmt = list->head; elmt != NULL; elmt = elmt->next){
         printf("%d ", elmt->data);

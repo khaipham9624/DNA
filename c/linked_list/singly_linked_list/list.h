@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 typedef int dataType;
 typedef struct ListElmt_ {
     dataType data;
@@ -52,7 +53,7 @@ int list_rem_next(List *list, ListElmt *element);
 /**
  * @brief return the number of elements in the list
 */
-int list_size(List *list);
+int list_size(const List *list);
 
 /**
  * @brief return the head of list
@@ -79,12 +80,12 @@ int list_is_tail(List *list, ListElmt *element);
 /**
  * @brief return data of element
 */
-dataType list_data(List *list, ListElmt *element);
+dataType list_data(const List *list, const ListElmt *element);
 
 /**
  * @brief return next element
 */
 ListElmt *list_next(List *list, ListElmt *element);
 
-void list_print(List *list);
+void list_print(const List *list);
 #endif
